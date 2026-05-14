@@ -17,38 +17,6 @@ tsne <- read.table("/home/yolanda/tblab/yolanda/GLOWgenes/panelAPP/analysis/data
 #
 gene_types <- read.table("/home/yolanda/tblab/yolanda/GLOWgenes/panelAPP/analysis/data_exploration/gene_types.csv", header = TRUE, sep = ",")
 
-### rename CLUSTERS FOR PLOT: 
-disease_matrix <- disease_matrix %>%
-  mutate(Cluster = case_when(
-    Cluster == 4 ~ 1,
-    Cluster == 3 ~ 2,
-    Cluster == 0 ~ 3,
-    Cluster == 2 ~ 4,
-    Cluster == 1 ~ 5,
-    TRUE ~ Cluster # Default case (if needed)
-  ))
-
-stat_tops  <- stat_tops %>%
-  mutate(cluster = case_when(
-    cluster == 4 ~ 1,
-    cluster == 3 ~ 2,
-    cluster == 0 ~ 3,
-    cluster == 2 ~ 4,
-    cluster == 1 ~ 5,
-    TRUE ~ cluster # Default case (if needed)
-  ))
-
-gene_types  <- gene_types %>%
-  mutate(cluster = case_when(
-    cluster == 4 ~ 1,
-    cluster == 3 ~ 2,
-    cluster == 0 ~ 3,
-    cluster == 2 ~ 4,
-    cluster == 1 ~ 5,
-    TRUE ~ cluster # Default case (if needed)
-  ))
-
-
 ######
 nrow(disease_matrix) # 24757
 ncol(disease_matrix) # 211
@@ -105,8 +73,6 @@ median_genes["Cluster"] <- factor(disease_matrix$Cluster, levels = c_order$Clust
 head(median_genes)
 
 median_genes["HRAS",]
-
-### vamos a juntar ambos y restamos media y mediana: 
 
 median_mean <- merge(median_genes["Median"], df_mean_genes, by = 'row.names')
 
