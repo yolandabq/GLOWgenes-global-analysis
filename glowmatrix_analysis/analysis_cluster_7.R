@@ -18,20 +18,6 @@ rownames(disease_matrix) <- disease_matrix$SYMBOL
 #
 #gene_types <- read.table("/home/yolanda/tblab/yolanda/GLOWgenes/panelAPP/analysis/data_exploration/gene_types.csv", header = TRUE, sep = ",")
 
-### rename CLUSTERS FOR PLOT: 
-disease_matrix <- disease_matrix %>%
-  mutate(Cluster = case_when(
-    Cluster == 3 ~ 0,
-    Cluster == 6 ~ 1,
-    Cluster == 5 ~ 2,
-    Cluster == 4 ~ 3,
-    Cluster == 2 ~ 4,
-    Cluster == 0 ~ 5,
-    Cluster == 1 ~ 6,
-    TRUE ~ Cluster # Default case (if needed)
-  ))
-
-
 ######
 nrow(disease_matrix) # 24757
 ncol(disease_matrix) # 211
@@ -165,8 +151,6 @@ summary_gene_type_cluster <- gene_type_cluster %>%
   group_by(Cluster, Label) %>%
   summarise(Count = n(), .groups = "drop")
 
-# los NAs son los que no se han anotado con Biomart: gene_annotation %>% dplyr::filter(hgnc_symbol == "AARS") ## este por ejemplo es un alias de AARS1
-
 summary_gene_type_cluster$Cluster <- factor(summary_gene_type_cluster$Cluster)
 summary_gene_type_cluster$Label <- factor(summary_gene_type_cluster$Label, levels = rev(c("Protein coding", "ncRNA", "Pseudogene", "Other")))
 
@@ -208,7 +192,7 @@ go_top_005$NAME <- str_sub(go_top_005$Term,1,-14)
 # go_top_005[go_top_005$NAME == "Negative Regulation of Transcription by RNA Polymerase II" ,]$NAME <- "Negative Regulation of \nTranscription by RNA Polymerase II"
 # go_top_005[go_top_005$NAME == "Positive Regulation of Intracellular Signal Transduction" ,]$NAME <- "Positive Regulation of \nIntracellular Signal Transduction"
 
-## vamos a redondear la leyenda
+
 library(scales) # Required for scales::scientific
 
 go_top_plot <- ggplot(go_top_005[c(1:15),], aes(x=reorder(NAME, Combined.Score), y=Combined.Score, color = Adjusted.P.value, size=Odds.Ratio)) +
